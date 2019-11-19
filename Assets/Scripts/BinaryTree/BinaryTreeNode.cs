@@ -30,7 +30,7 @@ namespace Vitens.BinaryTree
 
         public BinaryTreeNode()
         {
-            CreateTreeNode(default, null, null);
+            CreateTreeNode(default(T), null, null);
         }
 
         public BinaryTreeNode(T var)

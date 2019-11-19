@@ -21,12 +21,21 @@ namespace Vitens.BinaryTree
                     head = temp;
                 }
 
+                //BinaryTreeNode
 
 
-                
             }
         }
 
+        public BinaryTree(int rootVal = 0)
+        {
+            head = new BinaryTreeNode<int>(rootVal);
+        }
+
+        public void AddLeftNode(BinaryTreeNode<int> head)
+        {
+
+        }
 
     }
 
