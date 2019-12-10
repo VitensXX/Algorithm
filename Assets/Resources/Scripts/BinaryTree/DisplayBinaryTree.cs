@@ -17,7 +17,7 @@ namespace Vitens.BinaryTree
 
             for (int i = 0; i < tree.treeNodes.Count; i++)
             {
-                TreeNodeCtrl.Show(panel, tree.treeNodes[i].Data);
+                //TreeNodeCtrl.Show(panel, tree.treeNodes[i].Data);
             }
         }
 
