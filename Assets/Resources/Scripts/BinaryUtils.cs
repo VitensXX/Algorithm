@@ -8,6 +8,41 @@ using System.Text;
 /// </summary>
 public class BinaryUtils
 {
+    //是否为偶数 (even number)   
+    public static bool IsEven(int number)
+    {
+        return (number & 1) == 0;//等价 number % 2 == 0
+    }
+
+    //判断二进制的第n位为 1 或 0
+    public static bool IsOneInCurBit(int number, int bit)
+    {
+        return (number & (1 << bit - 1)) != 0;
+    }
+
+    //将二进制的第 n 位设置为 1
+    public static int SetCurBitToOne(int number, int bit)
+    {
+        return number | 1 << bit - 1;
+    }
+
+    //将二进制的第 n 位设置为 0
+    public static int SetCurBitToZero(int number, int bit)
+    {
+        return number & ~(1 << bit - 1);
+    }
+
+    //交换两个数的值 
+    public static void SwitchNumberAB(int a, int b)
+    {
+        // a ^ 0 = a，a ^ a = 0
+        Debug.LogError(a + " " + b);
+        a = a ^ b;
+        b = a ^ b;
+        a = a ^ b;
+        Debug.LogError(a + " " + b);
+    }
+
     //将十进制转换成二进制
     public static string Int2Binary(int number)
     {
