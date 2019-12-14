@@ -22,10 +22,14 @@ public class Binary : MonoBehaviour
         //int[] test = new int[] { 2, 3, 4, 3, 2, 1, 1, 7, 9, 7, 9 };
         //Debug.LogError(BinaryUtils.FindNotRepeatOne(test));
 
-        int[] test = SortUtils.GenerateRandomArr(10);
-        SortUtils.BubSort(SortUtils.CopyArr(test));
-        SortUtils.BubSortV2(SortUtils.CopyArr(test));
-        SortUtils.SelSort(SortUtils.CopyArr(test));
+        int[] test = SortUtils.GenerateRandomArr(11);
+        //SortUtils.BubSort(SortUtils.CopyArr(test));
+        //SortUtils.BubSortV2(SortUtils.CopyArr(test));
+        //SortUtils.SelSort(SortUtils.CopyArr(test));
+        SortUtils.LogArr(test, "Origin: ");
+        //SortUtils.InsSort(test);
+
+        SortUtils.MergeSort(test);
     }
 
 
