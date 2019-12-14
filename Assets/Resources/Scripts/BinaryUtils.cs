@@ -43,6 +43,18 @@ public class BinaryUtils
         Debug.LogError(a + " " + b);
     }
 
+    //找出不重复的一个数(只有一个数不重复,且重复的数最多只有一次重复)
+    public static int FindNotRepeatOne(int[] arr)
+    {
+        int x = 0;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            x ^= arr[i];
+        }
+
+        return x;
+    }
+
     //将十进制转换成二进制
     public static string Int2Binary(int number)
     {
