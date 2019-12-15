@@ -4,47 +4,48 @@ using System.Text;
 using UnityEngine;
 
 public class SortUtils
-{   
-    //冒泡排序
+{
+    #region 冒泡排序 稳定的排序
+    //冒泡排序1
     public static void BubSort(int[] arr)
     {
         TimeSystem.TickStart();
-        int changeTimes = 0;
-        int loopCount = 0;
+        int sweapCount = 0;
+        int compareCount = 0;
         for (int i = 0; i < arr.Length - 1; i++)
         {
             for (int j = 0; j < arr.Length - 1 - i; j++)
             {
-                loopCount++;
+                compareCount++;
                 if (arr[j] > arr[j + 1])
                 {
-                    Sweap(ref arr[j], ref arr[j + 1]);
-                    changeTimes++;
+                    Sweap(arr, j, j + 1);
+                    sweapCount++;
                 }
             }
         }
         TimeSystem.TickEnd();
-        //LogArr(arr);
-        Debug.LogError("changeTimes : "+changeTimes + " loopCount:"+loopCount);
+        LogArr(arr);
+        Debug.LogError(compareCount + " " + sweapCount);
     }
 
-    //冒泡排序
+    //冒泡排序2
     public static void BubSortV2(int[] arr)
     {
         TimeSystem.TickStart();
-        int changeTimes = 0;
+        int sweapCount = 0;
         bool chageFlag;
-        int loopCount = 0;
+        int compareCount = 0;
         for (int i = 0; i < arr.Length - 1; i++)
         {
             chageFlag = false;
             for (int j = 0; j < arr.Length - 1 - i; j++)
             {
-                loopCount++;
+                compareCount++;
                 if (arr[j] > arr[j + 1])
                 {
-                    Sweap(ref arr[j], ref arr[j + 1]);
-                    changeTimes++;
+                    Sweap(arr, j, j + 1);
+                    sweapCount++;
                     chageFlag = true;
                 }
             }
@@ -54,9 +55,46 @@ public class SortUtils
             }
         }
         TimeSystem.TickEnd();
-        //LogArr(arr);
-        Debug.LogError("changeTimes : " + changeTimes + " loopCount:" + loopCount);
+        LogArr(arr);
+        Debug.LogError(compareCount + " " + sweapCount);
     }
+
+    //冒泡排序3
+    public static void BubSortV3(int[] arr)
+    {
+        TimeSystem.TickStart();
+        int sweapCount = 0;
+        int compareCount = 0;
+        int sweapIndex = 0;
+        bool chageFlag;
+        int len = arr.Length - 1;
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            chageFlag = false;
+            for (int j = 0; j < len; j++)
+            {
+                compareCount++;
+                if (arr[j] > arr[j + 1])
+                {
+                    Sweap(arr, j, j + 1);
+                    sweapCount++;
+                    sweapIndex = j;
+                    chageFlag = true;
+                }
+            }
+            len = sweapIndex;
+
+            if (!chageFlag)
+            {
+                break;
+            }
+        }
+        TimeSystem.TickEnd();
+        LogArr(arr);
+        Debug.LogError(compareCount + " "+ sweapCount);
+    }
+
+    #endregion
 
     //选择排序 不稳定的
     public static void SelSort(int[] arr)
@@ -81,7 +119,7 @@ public class SortUtils
             //如果min有修改过,则说明第一个未排序的数不是最小的,需要和最小的交换位置
             if(min != i)
             {
-                Sweap(ref arr[i], ref arr[min]);
+                Sweap(arr, i, min);
                 changeTimes++;
             }
         }
@@ -99,7 +137,7 @@ public class SortUtils
             {
                 if(arr[j] < arr[j - 1])
                 {
-                    Sweap(ref arr[j], ref arr[j - 1]);
+                    Sweap(arr, j, j - 1);
                     LogArr(arr);
                 }
                 else
@@ -176,19 +214,74 @@ public class SortUtils
     #endregion
 
     #region 快速排序
-
+    //普通排序
     public static void QuickSort(int[] arr)
     {
+        quickSort(arr, 0, arr.Length - 1);
 
+        LogArr(arr);
     }
+    static void quickSort(int[] arr, int l, int r)
+    {
+        if (l >= r)
+        {
+            return;
+        }
+        int pivot = Partition(arr, l, r);
+        quickSort(arr, l, pivot - 1);
+        quickSort(arr, pivot + 1, r);
+    }
+
+    static int Partition(int[] arr, int l, int r)
+    {
+        int pivot = arr[l];
+        int lp = l;
+        bool hasLp = false;
+        for (int i = l + 1; i < r + 1; i++)
+        {
+            if (arr[i] > pivot && !hasLp)
+            {
+                hasLp = true;
+                lp = i;
+            }
+            else if (arr[i] < pivot && i > lp && hasLp)
+            {
+                Sweap(arr, i, lp);
+                lp++;
+            }
+        }
+        //
+        if (hasLp)
+        {
+            Sweap(arr, l, lp - 1);
+            return lp - 1;
+        }
+        else
+        {
+            Sweap(arr, l, r);
+            return r;
+        }
+    }
+    
+    //随机普通排序
+
+    //双路法
+
+    //三路法
 
     #endregion
 
-    static void Sweap(ref int a, ref int b)
+    static void Sweap(int[] arr, int i, int j)
     {
-        a = a ^ b;
-        b = a ^ b;
-        a = a ^ b;
+        //同一个位子换结果都为0
+        if(i == j)
+        {
+            return;
+        }
+
+        arr[i] = arr[i] ^ arr[j];
+        arr[j] = arr[i] ^ arr[j];
+        arr[i] = arr[i] ^ arr[j];
     }
 
     public static void LogArr(int[] arr, string tag = "")
