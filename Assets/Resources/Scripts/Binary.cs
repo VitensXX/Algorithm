@@ -23,7 +23,7 @@ public class Binary : MonoBehaviour
         //int[] test = new int[] { 5,1,9,3,7,4,8,6,2};
         //Debug.LogError(BinaryUtils.FindNotRepeatOne(test));
 
-        int[] test = SortUtils.GenerateRandomArr(20);
+        int[] test = SortUtils.GenerateRandomArr(20, 1,2000);
         //SortUtils.BubSort(SortUtils.CopyArr(test));
         //SortUtils.BubSortV2(SortUtils.CopyArr(test));
         //SortUtils.BubSortV3(SortUtils.CopyArr(test));
@@ -34,7 +34,7 @@ public class Binary : MonoBehaviour
         //SortUtils.MergeSort(test);
 
 
-        SortUtils.QuickSort(test);
+        SortUtils.RadixSort(test);
     }
 
 

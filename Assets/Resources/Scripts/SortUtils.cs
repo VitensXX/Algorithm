@@ -96,6 +96,7 @@ public class SortUtils
 
     #endregion
 
+    #region 选择排序 不稳定的
     //选择排序 不稳定的
     public static void SelSort(int[] arr)
     {
@@ -128,6 +129,9 @@ public class SortUtils
         Debug.LogError("changeTimes : " + changeTimes + " loopCount:" + loopCount);
     }
 
+    #endregion
+
+    #region 插入排序
     //插入排序
     public static void InsSort(int[] arr)
     {
@@ -148,6 +152,7 @@ public class SortUtils
             }
         }
     }
+    #endregion
 
     #region 归并排序
 
@@ -262,7 +267,7 @@ public class SortUtils
             return r;
         }
     }
-    
+
     //随机普通排序
 
     //双路法
@@ -271,6 +276,141 @@ public class SortUtils
 
     #endregion
 
+    #region 计数排序 Count Sort 非比较排序
+    
+    public static void CountSort(int[] arr)
+    {
+        LogArr(arr,"origin ");
+        int i = 0;
+
+        //找到最大最小值
+        int min = arr[0];
+        int max = arr[0];
+        while (i < arr.Length)
+        {
+            if(arr[i] < min)
+            {
+                min = arr[i];
+            }
+            else if(arr[i] > max)
+            {
+                max = arr[i];
+            }
+            i++;
+        }
+        i = 0;
+
+        int j = 0;
+        int[] tempArr = new int[max - min + 1];
+        //开始计数
+        while(i < arr.Length)
+        {
+            tempArr[arr[i++] - min]++;
+        }
+        i = 0;
+
+        //依次取出数据
+        while(j < tempArr.Length)
+        {
+            if(tempArr[j] > 0)
+            {
+                arr[i++] = j + min;
+                tempArr[j]--;
+            }
+            else
+            {
+                j++;
+            }
+        }
+
+        LogArr(arr);
+    }
+
+    #endregion
+
+    #region 基数排序 Radix Sort
+
+    public static void RadixSort(int[] arr)
+    {
+        LogArr(arr,"origin ");
+        int[,] bucket = new int[10, arr.Length + 1];
+
+        //找到最长位数(代表需要排序的次数)
+        int length = 0;
+        int max = arr[0];
+        int i = 1;
+        while (i < arr.Length)
+        {
+            if (arr[i] > max)
+            {
+                max = arr[i];
+            }
+            i++;
+        }
+        i = 0;
+
+        while(max > 0)
+        {
+            max /= 10;
+            length++;
+            Debug.LogError("~~~~ "+length);
+            //将数据按当前基数填入到对应的桶中
+            while(i < arr.Length)
+            {
+                int radix = GetRadixNum(arr[i], length);
+                bucket[radix,0]++;
+                bucket[radix, bucket[radix, 0]] = arr[i++];
+            }
+            i = 0;
+
+            //从桶中挨着取出数据
+            while(i < arr.Length)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    int k = 0;
+                    while (k < bucket[j, 0])
+                    {
+                        arr[i++] = bucket[j, k++];
+                    }
+                    //取完一个桶的数据后,将个数标识置0
+                    bucket[j, 0] = 0;
+                }
+                ////int j = 0;
+                //while(j < bucket.Length)
+                //{
+
+                //    j++;
+                //}
+                if(tick++ > 10000)
+                {
+                    Debug.LogError("!!!!!!!");
+                    break;
+                }
+            }
+            i = 0;
+        }
+
+        LogArr(arr, "finish ");
+    }
+
+    static int tick = 0;
+
+    static int GetRadixNum(int value, int radix)
+    {
+        int returnValue = value / (int)Mathf.Pow(10, radix - 1) % 10;
+        //Debug.LogError(value + " " + radix + " " + returnValue);
+
+        return returnValue;
+    }
+
+    #endregion
+
+    #region 桶排序
+
+    #endregion
+
+    #region utils fun
     static void Sweap(int[] arr, int i, int j)
     {
         //同一个位子换结果都为0
@@ -297,12 +437,17 @@ public class SortUtils
         Debug.LogError(tag + sb.ToString());
     }
 
-    public static int[] GenerateRandomArr(int length)
+    public static void LogArr2(int[,] arr)
+    {
+        //arr.GetLength()
+    }
+
+    public static int[] GenerateRandomArr(int length, int min = 1, int max = 10)
     {
         int[] arr = new int[length];
         for (int i = 0; i < arr.Length; i++)
         {
-            arr[i] = Random.Range(1, 20);
+            arr[i] = Random.Range(min, max);
         }
         return arr;
     }
@@ -317,4 +462,5 @@ public class SortUtils
         return arrCopy;
     }
 
+    #endregion
 }
