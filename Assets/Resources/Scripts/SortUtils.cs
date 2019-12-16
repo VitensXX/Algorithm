@@ -336,23 +336,11 @@ public class SortUtils
         int[,] bucket = new int[10, arr.Length + 1];
 
         //找到最长位数(代表需要排序的次数)
-        int length = 0;
-        int max = arr[0];
-        int i = 1;
-        while (i < arr.Length)
-        {
-            if (arr[i] > max)
-            {
-                max = arr[i];
-            }
-            i++;
-        }
-        i = 0;
+        int length = GetLoopCount(arr);
+        int i = 0;
 
-        while(max > 0)
+        while(length > 0)
         {
-            max /= 10;
-            length++;
             Debug.LogError("~~~~ "+length);
             //将数据按当前基数填入到对应的桶中
             while(i < arr.Length)
@@ -389,9 +377,37 @@ public class SortUtils
                 }
             }
             i = 0;
+
+            length--;
         }
 
         LogArr(arr, "finish ");
+    }
+
+    static int GetLoopCount(int[] arr)
+    {
+        if(arr.Length == 0)
+        {
+            return 0;
+        }
+
+        int loopCount = 0;
+        int max = arr[0];
+        for (int i = 1; i < arr.Length; i++)
+        {
+            if (arr[i] > max)
+            {
+                max = arr[i];
+            }
+        }
+
+        while (max > 0)
+        {
+            max /= 10;
+            loopCount++;
+        }
+
+        return loopCount;
     }
 
     static int tick = 0;
