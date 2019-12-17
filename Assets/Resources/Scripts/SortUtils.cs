@@ -440,7 +440,7 @@ public class SortUtils
         arr[i] = arr[i] ^ arr[j];
     }
 
-    public static void LogArr(int[] arr, string tag = "")
+    public static string LogArr(int[] arr, string tag = "", bool log = true)
     {
         StringBuilder sb = new StringBuilder();
         sb.Append("[ ");
@@ -450,12 +450,22 @@ public class SortUtils
             sb.Append(" ");
         }
         sb.Append("]");
-        Debug.LogError(tag + sb.ToString());
+        string arrStr = sb.ToString();
+        if (log)
+        {
+            Debug.LogError(tag + arrStr);
+        }
+        return arrStr;
     }
 
     public static void LogArr2(int[,] arr)
     {
-        //arr.GetLength()
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        //while(i < arr.GetLength(0))
+        //{
+        //    sb.Append(LogArr(arr.))
+        //}
     }
 
     public static int[] GenerateRandomArr(int length, int min = 1, int max = 10)
