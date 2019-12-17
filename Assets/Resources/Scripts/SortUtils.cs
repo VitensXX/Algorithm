@@ -339,48 +339,34 @@ public class SortUtils
         int length = GetLoopCount(arr);
         int i = 0;
 
-        while(length > 0)
+        for (int loopCount = 0; loopCount < length; loopCount++)
         {
-            Debug.LogError("~~~~ "+length);
             //将数据按当前基数填入到对应的桶中
-            while(i < arr.Length)
+            while (i < arr.Length)
             {
-                int radix = GetRadixNum(arr[i], length);
-                bucket[radix,0]++;
+                int radix = GetRadixNum(arr[i], loopCount + 1);
+                bucket[radix, 0]++;
                 bucket[radix, bucket[radix, 0]] = arr[i++];
             }
             i = 0;
+            LogArr2(bucket);
 
             //从桶中挨着取出数据
-            while(i < arr.Length)
+            while (i < arr.Length)
             {
                 for (int j = 0; j < 10; j++)
                 {
                     int k = 0;
                     while (k < bucket[j, 0])
                     {
-                        arr[i++] = bucket[j, k++];
+                        arr[i++] = bucket[j, ++k];
                     }
                     //取完一个桶的数据后,将个数标识置0
                     bucket[j, 0] = 0;
                 }
-                ////int j = 0;
-                //while(j < bucket.Length)
-                //{
-
-                //    j++;
-                //}
-                if(tick++ > 10000)
-                {
-                    Debug.LogError("!!!!!!!");
-                    break;
-                }
             }
             i = 0;
-
-            length--;
         }
-
         LogArr(arr, "finish ");
     }
 
@@ -410,14 +396,9 @@ public class SortUtils
         return loopCount;
     }
 
-    static int tick = 0;
-
     static int GetRadixNum(int value, int radix)
     {
-        int returnValue = value / (int)Mathf.Pow(10, radix - 1) % 10;
-        //Debug.LogError(value + " " + radix + " " + returnValue);
-
-        return returnValue;
+        return value / (int)Mathf.Pow(10, radix - 1) % 10;
     }
 
     #endregion
@@ -461,11 +442,20 @@ public class SortUtils
     public static void LogArr2(int[,] arr)
     {
         StringBuilder sb = new StringBuilder();
-        int i = 0;
-        //while(i < arr.GetLength(0))
-        //{
-        //    sb.Append(LogArr(arr.))
-        //}
+        int oneDimensionLength = arr.GetLength(0);
+
+        for (int i = 0; i < oneDimensionLength; i++)
+        {
+            sb.Append("[ ");
+            for (int j = 0; j < arr.Length / oneDimensionLength; j++)
+            {
+                sb.Append(arr[i, j]);
+                sb.Append(" ");
+            }
+            sb.Append("]\n");
+        }
+
+        Debug.LogError(sb.ToString());
     }
 
     public static int[] GenerateRandomArr(int length, int min = 1, int max = 10)
