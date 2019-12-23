@@ -9,8 +9,8 @@ public class TimeSystem
     //获取运行时间
     private static DateTime _start = DateTime.Now;
     
-    private static int _begin = 0;
-    private static int _end = 0;
+    //private static int _begin = 0;
+    //private static int _end = 0;
 
     static Stopwatch _sw = new Stopwatch();
 
