@@ -14,6 +14,6 @@ public class Test : MonoBehaviour
         RegularExpression.Compare();
         //Debug.LogError(input  + " "+pattern);
         //Debug.LogError("cur "+System.Text.RegularExpressions.Regex.IsMatch(input, pattern));
-        Debug.LogError("phonenum "+RegularExpression.IsValidPhoneNum("135456789111"));
+        //Debug.LogError("phonenum "+RegularExpression.IsValidPhoneNum("12345678911"));
     }
 }

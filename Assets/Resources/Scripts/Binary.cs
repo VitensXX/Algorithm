@@ -37,7 +37,7 @@ public class Binary : MonoBehaviour
 
         //SortUtils.RadixSort(test);
 
-        Debug.LogError( RegularExpression.IsValidPhoneNum(regularExpressionInput));
+        //Debug.LogError( RegularExpression.IsValidPhoneNum(regularExpressionInput));
     }
 
 
