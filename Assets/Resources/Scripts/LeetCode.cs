@@ -225,4 +225,27 @@ public class LeetCode : MonoBehaviour
     }
 
     #endregion
+
+    #region 9.判断整数是否为回文数
+
+    public bool IsPalindrome(int x)
+    {
+        if (x < 0)
+        {
+            return false;
+        }
+
+        int inverse = 0;
+        int temp = x;
+
+        while (temp > 0)
+        {
+            inverse = inverse * 10 + temp % 10;
+            temp /= 10;
+        }
+
+        return x == inverse;
+    }
+
+    #endregion
 }
