@@ -19,7 +19,22 @@ public class LeetCode : MonoBehaviour
             //ZTransform2();
             //IntReverse();
 
-            Debug.LogError( reverse(-123456789));
+            //Debug.LogError( reverse(-123456789));
+            //Debug.LogError( IntToRoman(3));
+            //Debug.LogError( IntToRoman(4));
+            //Debug.LogError( IntToRoman(9));
+            //Debug.LogError( IntToRoman(58));
+            //Debug.LogError( IntToRoman(1994));
+
+            //Debug.LogError(RomanToIntV2("III"));
+            //Debug.LogError(RomanToIntV2("IV"));
+            //Debug.LogError(RomanToIntV2("IX"));
+            //Debug.LogError(RomanToIntV2("LVIII"));
+            //Debug.LogError(RomanToIntV2("MCMXCIV"));
+            //string[] strs = new string[] { "flower", "flow", "flight", "dog", "racecar", "car"};
+            //Debug.LogError(LongestCommonPrefixV2(strs));
+
+            Debug.LogError(IsValid("([)]"));
         }
     }
 
@@ -246,6 +261,283 @@ public class LeetCode : MonoBehaviour
 
         return x == inverse;
     }
+
+    #endregion
+
+    #region 12.整数转罗马数字
+
+    string IntToRoman(int num)
+    {
+        //string[] romanSign = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+        //int[] intVal = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+
+        string[] romanSign = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+        int[] intVal = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+
+        //4 9 40 90 400 900
+        //string[] specialRomanSign = new string[] { "IV", "IX", "XL", "XC", "CD", "CM"};
+        //int[] specialIntVal = new int[] { 4, 9, 40, 90, 400, 900 };
+
+        string romanStr = "";
+        //int[] signCount = new int[romanSign.Length];
+        for (int i = romanSign.Length - 1; i >= 0; i--)
+        {
+            int signCount = num / intVal[i];
+            num %= intVal[i];
+
+            while (signCount > 0)
+            {
+                romanStr += romanSign[i];
+                signCount--;
+            }
+        }
+
+        return romanStr;
+    }
+
+    #endregion
+
+    #region 13.罗马数字转整数
+
+    public int RomanToInt(string s)
+    {
+        string[] romanSign = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+        int[] intVal = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+
+        int i = 0;
+        int result = 0;
+        while(i < s.Length - 1)
+        {
+            //尝试匹配两位
+            string doubleSign = s[i].ToString() + s[++i].ToString();
+
+            bool mathFlag = false;
+            for (int j = 0; j < romanSign.Length; j++)
+            {
+                if(doubleSign == romanSign[j])
+                {
+                    result += intVal[j];
+                    i++;//再向后移动一位
+                    mathFlag = true;
+                    break;
+                }
+            }
+
+            //如果两位的没有匹配成功 匹配一位
+            string singleSign = s[i - 1].ToString();
+            if (!mathFlag)
+            {
+                for (int j = 0; j < romanSign.Length; j++)
+                {
+                    if (singleSign == romanSign[j])
+                    {
+                        result += intVal[j];
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(i == s.Length - 1)
+        {
+            for (int j = 0; j < romanSign.Length; j++)
+            {
+                if (s[s.Length - 1].ToString() == romanSign[j])
+                {
+                    result += intVal[j];
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    //1.前面的比后面的小 减去前面的
+    //2.加上后面的
+    //3.最后一个加上
+    public int RomanToIntV2(string s)
+    {
+        int result = 0;
+        int i = 0;
+        while(i < s.Length - 1)
+        {
+            int curValue = GetValueByRoman(s.Substring(i, 1));
+            int nextValue = GetValueByRoman(s.Substring(++i, 1));
+            result += curValue >= nextValue ? curValue : -curValue;
+        }
+
+        result += GetValueByRoman(s.Substring(i, 1));
+
+        return result;
+    }
+
+    int GetValueByRoman(string romanSign)
+    {
+        switch (romanSign)
+        {
+            case "I":return 1;
+            case "V":return 5;
+            case "X":return 10;
+            case "L":return 50;
+            case "C":return 100;
+            case "D":return 500;
+            case "M":return 1000;
+            default: return 0;
+        }
+    }
+
+    #endregion
+
+    #region 14.最长公共前缀
+    public string LongestCommonPrefix(string[] strs)
+    {
+        string commonPrefix = "";
+        if(strs.Length == 0)
+        {
+            return "";
+        }
+        else if(strs.Length == 1)
+        {
+            return strs[0];
+        }
+        else
+        {
+            for (int i = 0; i < strs.Length - 1; i++)
+            {
+                commonPrefix = LongestCommonPrefixForTwoStr(strs[i], strs[i + 1]);
+                if(commonPrefix == "")
+                {
+                    return "";
+                }
+                else
+                {
+                    strs[i + 1] = commonPrefix;
+                }
+            }
+        }
+
+        return commonPrefix;
+    }
+
+    //获取两个字符串的最长公共子串
+    string LongestCommonPrefixForTwoStr(string a, string b)
+    {
+        string commonPrefix = "";
+        int i = 0;
+        while (i < a.Length && i < b.Length)
+        {
+            if (a.Substring(i, 1) == b.Substring(i, 1))
+            {
+                commonPrefix += a.Substring(i++, 1);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return commonPrefix;
+    }
+
+    public string LongestCommonPrefixV2(string[] strs)
+    {
+        if(strs.Length == 0)
+        {
+            return "";
+        }
+        else
+        {
+            string commonPrefix = strs[0];
+            for (int i = 1; i < strs.Length; i++)
+            {
+                while (strs[i].IndexOf(commonPrefix) != 0)
+                {
+                    commonPrefix = commonPrefix.Substring(0, commonPrefix.Length - 1);
+                }
+                //如果已经没有公共子串了 则退出
+                if (commonPrefix.Length == 0)
+                {
+                    break;
+                }
+            }
+
+            return commonPrefix;
+        }
+    }
+
+    #endregion
+
+    #region 20.有效的括号
+    public bool IsValid(string s)
+    { 
+        Stack<string> stack = new Stack<string>();
+
+        for (int i = 0; i < s.Length; i++)
+        {
+            string temp = s.Substring(i, 1);
+            switch (temp)
+            {
+                case "(":
+                    stack.Push("(");
+                    break;
+                case "[":
+                    stack.Push("[");
+                    break;
+                case "{":
+                    stack.Push("{");
+                    break;
+                case ")":
+                    if( !PeakAndPop(stack, "("))
+                    {
+                        return false;
+                    }
+                    break;
+                case "]":
+                    if (!PeakAndPop(stack, "["))
+                    {
+                        return false;
+                    }
+                    break;
+                case "}":
+                    if (!PeakAndPop(stack, "{"))
+                    {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return stack.Count == 0;
+    }
+
+    bool PeakAndPop(Stack<string> stack, string s)
+    {
+        if (stack.Count == 0 || stack.Peek() != s)
+        {
+            return false;
+        }
+        else
+        {
+            stack.Pop();
+            return true;
+        }
+    }
+
+
+    public bool IsValidV2(string s)
+    {
+        while (s.Contains("()") || s.Contains("[]") || s.Contains("{}"))
+        {
+            s = s.Replace("()", "");
+            s = s.Replace("[]", "");
+            s = s.Replace("{}", "");
+        }
+
+        return s.Length == 0;
+    }
+    #endregion
+
+    #region 21.合并两个有序链表
 
     #endregion
 }
