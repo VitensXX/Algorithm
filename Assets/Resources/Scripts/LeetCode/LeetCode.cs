@@ -539,5 +539,49 @@ public class LeetCode : MonoBehaviour
 
     #region 21.合并两个有序链表
 
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int x) { val = x; }
+    }
+
+    public class Solution
+    {
+        public ListNode MergeTwoLists(ListNode l1, ListNode l2)
+        {
+            ListNode mergeList = new ListNode(0);
+            ListNode tempNode = mergeList;
+
+            //遍历 直到某个链表到最后
+            while (l1 != null && l2 != null)
+            {
+                if (l1.val < l2.val)
+                {
+                    tempNode.next = l1;
+                    tempNode = tempNode.next;
+                    l1 = l1.next;
+                }
+                else
+                {
+                    tempNode.next = l2;
+                    tempNode = tempNode.next;
+                    l2 = l2.next;
+                }
+            }
+
+            if (l1 != null)
+            {
+                tempNode.next = l1;
+            }
+
+            if (l2 != null)
+            {
+                tempNode.next = l2;
+            }
+
+            return mergeList.next;
+        }
+    }
     #endregion
 }
