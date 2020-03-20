@@ -11,7 +11,15 @@ public class Binary : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+    }
+
+    private void OnGUI()
+    {
+        if (GUI.Button(new Rect(300, 0, 200, 50), "test binary"))
+        {
+            Test();
+        }
     }
 
     public void Test()
@@ -38,6 +46,8 @@ public class Binary : MonoBehaviour
         //SortUtils.RadixSort(test);
 
         //Debug.LogError( RegularExpression.IsValidPhoneNum(regularExpressionInput));
+
+        Debug.LogError(BinaryUtils.PrevPowerOfTwo(input));
     }
 
 

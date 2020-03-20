@@ -25,7 +25,7 @@ public class TimeSystem
 
     public static void TickStart()
     {
-        _sw.Restart();
+        //_sw.Restart();
     }
 
     public static void TickEnd()
