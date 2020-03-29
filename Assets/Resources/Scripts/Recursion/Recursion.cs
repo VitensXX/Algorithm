@@ -14,6 +14,7 @@ public class Recursion : MonoBehaviour
         //Debug.LogError(Fibonacci3(8));
         int[] arr = new int[] { 1, 2, 3, 4, 5, 6 };
         Debug.LogError(BinarySearch(arr, 3, 0, 5));
+        //Debug.LogError(BinarySearchV2(arr, 7));
     }
 
     public int Factorial(int n)
@@ -98,23 +99,50 @@ public class Recursion : MonoBehaviour
         }
         else
         {
-            int mid = (high + low) >> 2;
+            int mid = (high + low) >> 1;
             
             //目标在左侧
             if(target < arr[mid])
             {
-                return BinarySearch(arr, target, low, mid - 1);
+                BinarySearch(arr, target, low, mid - 1);
             }
             //目标在右侧
             else if(target > arr[mid])
             {
-                return BinarySearch(arr, target, mid + 1, high);
+                BinarySearch(arr, target, mid + 1, high);
             }
-            else
+           
+            return mid;
+        }
+    }
+
+    int BinarySearchV2(int[] arr, int target)
+    {
+        int high = arr.Length - 1;
+        int low = 0;
+
+        while(low <= high)
+        {
+            int mid = (high + low) >> 1;
+
+            if(arr[mid] == target)
             {
                 return mid;
             }
+            //在左侧
+            else if(target < arr[mid])
+            {
+                high = mid - 1;
+            }
+            //在右侧
+            else
+            {
+                low = mid + 1;
+            }
         }
+
+        //没有找到，返回-1
+        return -1;
     }
 
     #endregion

@@ -407,7 +407,7 @@ public class SortUtils
 
     #endregion
 
-    #region utils fun
+    #region utils functionc x
     static void Sweap(int[] arr, int i, int j)
     {
         //同一个位子换结果都为0
