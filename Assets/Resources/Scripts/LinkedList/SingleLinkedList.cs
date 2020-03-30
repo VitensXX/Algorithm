@@ -26,18 +26,24 @@ public class SingleLinkedList<T>
 
     Node GetNodeAt(int index)
     {
-        Node cur = head.next;
-        int i = 0;
-        while (cur != null && i < index)
+        //-1表示头结点
+        if(index == -1)
         {
-            cur = cur.next;
+            return head;
+        }
+
+        Node p = head.next;
+        int i = 0;
+        while (p != null && i < index)
+        {
+            p = p.next;
             i++;
         }
 
-        if (i == index)
+        if (i == index && p != null)
         {
-            Debug.Log("Get value:" + cur.value.ToString());
-            return cur;
+            Debug.Log("Get value:" + p.value.ToString());
+            return p;
         }
         else
         {
@@ -45,42 +51,116 @@ public class SingleLinkedList<T>
         }
     }
 
+    /// <summary>
+    /// 头部插入
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public bool InsertAtHead(T value)
     {
         Node n = new Node();
         n.value = value;
         n.next = head.next;
         head.next = n;
-        Debug.LogError("insert "+value.ToString()+" at head success!");
+        Debug.Log("insert "+value.ToString()+" at head success!");
         return true;
     }
 
-    public bool InsertAt(T node, int i)
+    /// <summary>
+    /// 在指定位置插入元素
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="i"></param>
+    /// <returns></returns>
+    public bool InsertAt(T value, int i)
     {
         //找到指定位置的前后节点
-        Node prevNode = GetNodeAt(i);
+        Node prevNode = GetNodeAt(i - 1);
         Node nextNode = prevNode.next;
 
         //创建新节点 插入操作
         Node newNode = new Node();
+        newNode.value = value;
         newNode.next = nextNode;
         prevNode.next = newNode;
-        Debug.Log("Insert " + node.ToString() + " at " + i + " success!");
+        Debug.Log("Insert " + value.ToString() + " at " + i + " success!");
         return true;
     }
 
-    public void DisplayList()
+    /// <summary>
+    /// 打印链表数据
+    /// </summary>
+    public void LogList()
     {
         StringBuilder sb = new StringBuilder();
-        Node node = head.next;
-        while(node != null)
+        Node p = head.next;
+        while(p != null)
         {
-            sb.Append(node.value.ToString());
+            sb.Append(p.value.ToString());
             sb.Append(",");
-            node = node.next;
+            p = p.next;
         }
 
-        Debug.LogError(sb.ToString());
+        Debug.Log(sb.ToString().TrimEnd(',') +"  len:"+GetLength());
+    }
+
+    public int GetLength()
+    {
+        int len = 0;
+        Node p = head;
+        while(p.next != null)
+        {
+            len++;
+            p = p.next;
+        }
+
+        return len;
+    }
+
+    public bool RemoveAt(int index)
+    {
+        int i = 0;
+        Node p = head.next;
+        Node prev = head;
+
+        while(p != null && i <= index)
+        {
+            //找到目标位置 进行移除操作
+            if(i == index)
+            {
+                prev.next = p.next;
+                Debug.LogError("remove success!");
+                return true;
+            }
+            prev = p;
+            p = p.next;
+            i++;
+        }
+
+        Debug.LogError("remove failed!");
+        return false;
+    }
+
+    public bool Remove(T value)
+    {
+        Node p = head.next;
+        Node prev = head;
+
+        while (p != null)
+        {
+            //找到目标位置 进行移除操作
+            //if (p.value == value)
+            //{
+            //    prev.next = p.next;
+            //    Debug.LogError("remove success!");
+            //    return true;
+            //}
+            prev = p;
+            p = p.next;
+        }
+
+        Debug.LogError("remove failed!");
+        return false;
     }
 
 }

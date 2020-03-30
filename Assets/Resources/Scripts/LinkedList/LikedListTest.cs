@@ -11,30 +11,50 @@ public class LikedListTest : MonoBehaviour
         _singleList = new SingleLinkedList<string>();
         _singleList.head = new SingleLinkedList<string>.Node();
         _singleList.head.next = null;
+
+        for (int i = 0; i < 5; i++)
+        {
+            _singleList.InsertAtHead(i.ToString());
+        }
     }
 
-    private string insertValuse = "0";
-    private string GetAtIndex = "0";
-    //private string textFieldString = "0";
+    private string insertValuse = "";
+    private string insertIndex = "";
+    private string GetAtIndex = "";
+
     private void OnGUI()
     {
         insertValuse = GUI.TextField(new Rect(110, 40, 80, 50), insertValuse);
         if (GUI.Button(new Rect(20, 40, 80, 50), "头插"))
         {
             _singleList.InsertAtHead(insertValuse);
-            //Debug.LogError(textFieldString);
+            insertValuse = "";
         }
 
-        GetAtIndex = GUI.TextField(new Rect(110, 140, 80, 50), GetAtIndex);
-        if (GUI.Button(new Rect(20, 140, 80, 50), "获取"))
+        insertIndex = GUI.TextField(new Rect(110, 140, 80, 50), insertIndex);
+        if (GUI.Button(new Rect(20, 140, 80, 50), "指定插入"))
+        {
+            _singleList.InsertAt(insertValuse, int.Parse(insertIndex));
+            insertIndex = "";
+        }
+
+        GetAtIndex = GUI.TextField(new Rect(110, 240, 80, 50), GetAtIndex);
+        if (GUI.Button(new Rect(20, 240, 80, 50), "获取"))
         {
             _singleList.GetAt(int.Parse(GetAtIndex));
+            GetAtIndex = "";
         }
 
-
-        if (GUI.Button(new Rect(20, 540, 80, 50), "打印"))
+        GetAtIndex = GUI.TextField(new Rect(110, 340, 80, 50), GetAtIndex);
+        if (GUI.Button(new Rect(20, 340, 80, 50), "移除"))
         {
-            _singleList.DisplayList();
+            _singleList.RemoveAt(int.Parse(GetAtIndex));
+            GetAtIndex = "";
+        }
+
+        if (GUI.Button(new Rect(400, 140, 80, 50), "打印"))
+        {
+            _singleList.LogList();
         }
     }
 }
