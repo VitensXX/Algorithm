@@ -4,15 +4,32 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+/// <summary>
+/// 单链表
+/// 1.插入：头插，尾插，指定位置插入
+/// 2.删除：指定元素删除，指定位置删除
+/// 3.修改：指定位置元素修改
+/// 4.查找：通过索引查找
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class SingleLinkedList<T>
 {
     public class Node
     {
         public T value;
         public Node next;
+
+        public Node() { }
+
+        public Node(T value)
+        {
+            this.value = value;
+            next = null;
+        }
     }
 
     public Node head;
+    public Node rear;
 
     /// <summary>
     /// 获取指定位置的元素
@@ -47,8 +64,24 @@ public class SingleLinkedList<T>
         }
         else
         {
+            return null;
             throw new Exception("index is lager than list length!");
         }
+    }
+
+    Node GetNode(T value)
+    {
+        Node p = head.next;
+        while(p != null)
+        {
+            if (p.value.Equals(value))
+            {
+                return p;
+            }
+            p = p.next;
+        }
+        Debug.Log("not find node where value = " + value.ToString());
+        return null;
     }
 
     /// <summary>
@@ -58,10 +91,16 @@ public class SingleLinkedList<T>
     /// <returns></returns>
     public bool InsertAtHead(T value)
     {
-        Node n = new Node();
-        n.value = value;
+        Node n = new Node(value);
         n.next = head.next;
         head.next = n;
+
+        if (rear == head)
+        {
+            Debug.Log("Change rear at InsertAtHead");
+            rear = n;
+        }
+
         Debug.Log("insert "+value.ToString()+" at head success!");
         return true;
     }
@@ -79,10 +118,16 @@ public class SingleLinkedList<T>
         Node nextNode = prevNode.next;
 
         //创建新节点 插入操作
-        Node newNode = new Node();
-        newNode.value = value;
+        Node newNode = new Node(value);
         newNode.next = nextNode;
         prevNode.next = newNode;
+
+        if(prevNode == rear)
+        {
+            Debug.Log("Change rear at InsertAt");
+            rear = newNode;
+        }
+
         Debug.Log("Insert " + value.ToString() + " at " + i + " success!");
         return true;
     }
@@ -149,18 +194,64 @@ public class SingleLinkedList<T>
         while (p != null)
         {
             //找到目标位置 进行移除操作
-            //if (p.value == value)
-            //{
-            //    prev.next = p.next;
-            //    Debug.LogError("remove success!");
-            //    return true;
-            //}
+            if (p.value.Equals(value))
+            {
+                prev.next = p.next;
+                Debug.Log("remove success!" + value.ToString());
+                return true;
+            }
             prev = p;
             p = p.next;
         }
 
-        Debug.LogError("remove failed!");
+        Debug.Log("remove failed!");
         return false;
     }
 
+    public void AddV2(T value)
+    {
+        Node newNode = new Node(value);
+        rear.next = newNode;
+        Debug.Log("Change rear at AddV2");
+        rear = newNode;
+        Debug.Log("add " + value.ToString());
+    }
+
+    public bool Modify(int index, T value)
+    {
+        Node p = GetNodeAt(index);
+        if(p != null)
+        {
+            p.value = value;
+            return true;
+        }
+        return false;
+    }
+
+    public bool Modify(T old, T now)
+    {
+        Node p = GetNode(old);
+        if (p != null)
+        {
+            p.value = now;
+            return true;
+        }
+        return false;
+    }
+
+    public void Clear()
+    {
+        
+        Node p = head;
+        //是否要断掉所有关联？
+        while (p.next != null)
+        {
+            Node temp = p;
+            p.next = null;
+
+        }
+
+        head.next = null;
+        rear = head;
+    }
 }
