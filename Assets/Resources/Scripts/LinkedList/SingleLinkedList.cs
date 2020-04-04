@@ -203,6 +203,22 @@ public class SingleLinkedList<T> : IListOperation<T>
         return len;
     }
 
+    public bool Contains(T e)
+    {
+        Node p = _head;
+        while (p.next != null)
+        {
+            if(p.next.value.Equals(e))
+            {
+                return true;
+            }
+
+            p = p.next;
+        }
+
+        return false;
+    }
+
     //sort?
 
 }

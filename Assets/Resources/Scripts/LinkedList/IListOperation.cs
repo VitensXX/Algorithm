@@ -37,4 +37,6 @@ public interface IListOperation<T>
     /// 清空
     /// </summary>
     void Clear();
+
+    bool Contains(T element);
 }
