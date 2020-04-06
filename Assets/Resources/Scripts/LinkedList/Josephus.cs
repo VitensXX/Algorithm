@@ -12,7 +12,9 @@ public class Josephus : MonoBehaviour
 
     private void Start()
     {
-        Show();
+        //Show();
+
+        MagicPoker();
     }
 
     //数组实现
@@ -53,6 +55,7 @@ public class Josephus : MonoBehaviour
         Debug.LogError(s + "\n iteration count:"+iterationCount);
     }
 
+    //魔术师发牌
     void MagicPoker()
     {
         int[] poker = new int[13];
@@ -65,6 +68,8 @@ public class Josephus : MonoBehaviour
         int putCount = 0;
         int number = 0;
         int index = 0;
+        //扑克点数 从1开始 每次加一
+        int pokerNumber = 1;
 
         int iterationCount = 0;
         while(putCount < poker.Length)
@@ -76,15 +81,29 @@ public class Josephus : MonoBehaviour
             }
 
             //未放牌
-            if (!putList[index] && ++index == number)
+            if (!putList[index] && ++number == pokerNumber)
             {
                 //指定位置放牌
-                poker[index] = number;
-                
-                number++;
-                index = 0;
+                poker[index] = pokerNumber;
+                //设置已放置标志
+                putList[index] = true;
+                //放牌计数加一
+                putCount++;
+                //牌的点数加一
+                pokerNumber++;
+                //
+                number=0;
             }
 
+            index = (index + 1) % poker.Length;
         }
+
+        string s = "";
+        for (int i = 0; i < poker.Length; i++)
+        {
+            s += poker[i] + ",";
+        }
+        Debug.LogError(s);
+
     }
 }
