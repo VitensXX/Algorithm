@@ -5,9 +5,9 @@ using System.Text;
 using UnityEngine;
 
 /// <summary>
-/// 循环链表
+/// 循环链表 Circular linked list
 /// 初始状态 头指针和尾指针的next都指向头节点
-/// 有元素时,头结点的next指向第一个元素,尾指针指向最后一个元素,且最后一个元素的next指向第一个元素
+/// 有元素时,头结点的next指向第一个元素,尾指针指向最后一个元素,且最后一个元素的next指向头节点
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public class CircleLinkedList<T> : IListOperation<T>
@@ -30,12 +30,14 @@ public class CircleLinkedList<T> : IListOperation<T>
 
     Node _head;
     Node _rear;//指向最后一个元素
+    Node _iterator;
 
     public CircleLinkedList()
     {
         _head = new Node();
         _head.next = _head;
         _rear = _head;
+        _iterator = _head;
     }
 
     public void Add(T element)
@@ -43,10 +45,10 @@ public class CircleLinkedList<T> : IListOperation<T>
         Node n = new Node(element);
 
         //空链表的情况
-        if(_rear.next == _head)
+        if(_head.next == _head)
         {
             _head.next = n;
-            n.next = n;
+            n.next = _head;
             _rear = n;
         }
         //非空链表
@@ -54,8 +56,8 @@ public class CircleLinkedList<T> : IListOperation<T>
         {
             //插入到末尾
             _rear.next = n;
-            //新元素指向第一个元素
-            n.next = _head.next;
+            //新元素指向头节点
+            n.next = _head;
             //尾节点指向新元素
             _rear = n;
         }
@@ -65,6 +67,7 @@ public class CircleLinkedList<T> : IListOperation<T>
     {
         _head.next = _head;
         _rear = _head;
+        _iterator = _head;
     }
 
     public bool Contains(T element)
@@ -88,25 +91,17 @@ public class CircleLinkedList<T> : IListOperation<T>
             return true;
         }
 
-        Node p = _head.next;
-        //如果删除的是第一个元素 需要吧最后一个元素指向第二个元素
-        if(p.value.Equals(element))
-        {
-            _head.next = p.next;
-            _rear.next = _rear;
-            return true;
-        }
-
+        Node p = _head;
         Node prev = p;
-        p = p.next;
-        while (p != _head.next)
+        while (p.next != _head)
         {
+            p = p.next;
             //找到改元素
             if (p.value.Equals(element))
             {
                 prev.next = p.next;
                 //如果删除的是尾节点
-                if(p.next == _head.next)
+                if(p.next == _head)
                 {
                     //修改尾指针
                     _rear = prev;
@@ -116,8 +111,6 @@ public class CircleLinkedList<T> : IListOperation<T>
             }
             //改变前一个记录
             prev = p;
-            //指针往后移动
-            p = p.next;
         }
 
         return false;
@@ -136,12 +129,65 @@ public class CircleLinkedList<T> : IListOperation<T>
     int GetCount()
     {
         int count = 0;
-        Node p = _head.next;
-        while(p != _rear)
+        Node p = _head;
+        while(p.next != _head)
         {
+            p = p.next;
             count++;
         }
 
         return count;
+    }
+
+    public void LogList()
+    {
+        StringBuilder sb = new StringBuilder();
+        Node p = _head;
+        while (p.next != _head)
+        {
+            p = p.next;
+            sb.Append(p.value.ToString());
+            sb.Append(",");
+        }
+
+        Debug.Log(sb.ToString().TrimEnd(',') + "  len:" + Count);
+    }
+
+    Node _prevIterator;
+    public void Move()
+    {
+        _prevIterator = _iterator;
+        if(_iterator.next != _head)
+        {
+            _iterator = _iterator.next;
+        }
+        else
+        {
+            _iterator = _head.next;
+        }
+    }
+
+    public T RemoveAtIterator()
+    {
+        T data = _iterator.value;
+        if(_prevIterator == _iterator)
+        {
+            _iterator = _head;
+            _head.next = _head;
+        }
+        else if(_prevIterator.next == _head)
+        {
+            _head.next = _iterator.next;
+        }
+        else
+        {
+            _prevIterator.next = _iterator.next;
+        }
+        return data;
+    }
+
+    public bool IsEmpty()
+    {
+        return _head.next == _head;
     }
 }

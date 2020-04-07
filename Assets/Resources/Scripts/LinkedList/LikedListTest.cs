@@ -5,14 +5,22 @@ using UnityEngine;
 public class LikedListTest : MonoBehaviour
 {
     SingleLinkedList<string> _singleList;
+    CircleLinkedList<string> _cList;
 
     private void Start()
     {
-        _singleList = new SingleLinkedList<string>();
+        //_singleList = new SingleLinkedList<string>();
+        //for (int i = 0; i < 5; i++)
+        //{
+        //    _singleList.Insert(0, i.ToString());
+        //}
+
+        _cList = new CircleLinkedList<string>();
         for (int i = 0; i < 5; i++)
         {
-            _singleList.Insert(0, i.ToString());
+            _cList.Add(i.ToString());
         }
+
     }
 
     private string insertValue = "";
@@ -21,11 +29,6 @@ public class LikedListTest : MonoBehaviour
     private void OnGUI()
     {
         insertValue = GUI.TextField(new Rect(110, 40, 80, 50), insertValue);
-        //if (GUI.Button(new Rect(20, 40, 80, 50), "头插"))
-        //{
-        //    _singleList.InsertAtHead(insertValue);
-        //    insertValue = "";
-        //}
 
         indexValue = GUI.TextField(new Rect(110, 140, 80, 50), indexValue);
         if (GUI.Button(new Rect(20, 140, 80, 50), "指定插入"))
@@ -50,31 +53,19 @@ public class LikedListTest : MonoBehaviour
 
         if (GUI.Button(new Rect(20, 440, 80, 50), "移除元素"))
         {
-            _singleList.Delete(insertValue);
+            _cList.Delete(insertValue);
             indexValue = "";
         }
 
         if (GUI.Button(new Rect(110, 440, 80, 50), "尾插"))
         {
-            _singleList.Add(insertValue);
+            _cList.Add(insertValue);
             indexValue = "";
         }
 
-        //if (GUI.Button(new Rect(110, 340, 80, 50), "修改元素"))
-        //{
-        //    _singleList.Modify(insertValue, indexValue);
-        //    indexValue = "";
-        //}
-
-        //if (GUI.Button(new Rect(200, 440, 80, 50), "修改"))
-        //{
-        //    _singleList.Modify(int.Parse(indexValue) , insertValue);
-        //    indexValue = "";
-        //}
-
         if (GUI.Button(new Rect(400, 140, 80, 50), "打印"))
         {
-            _singleList.LogList();
+            _cList.LogList();
         }
     }
 }

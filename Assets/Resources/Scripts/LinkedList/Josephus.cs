@@ -7,14 +7,15 @@ using UnityEngine;
 /// </summary>
 public class Josephus : MonoBehaviour
 {
-    const int TOTAL = 100;
+    const int TOTAL = 10;
     const int INTERVAL = 5;
 
     private void Start()
     {
-        //Show();
+        Show();
+        Josephus2();
 
-        MagicPoker();
+        //MagicPoker();
     }
 
     //数组实现
@@ -53,6 +54,44 @@ public class Josephus : MonoBehaviour
         }
 
         Debug.LogError(s + "\n iteration count:"+iterationCount);
+    }
+
+    void Josephus2()
+    {
+        //从1到100编号 形成循环链表
+        CircleLinkedList<int> people = new CircleLinkedList<int>();
+        int count = 0;
+        while(count < TOTAL)
+        {
+            people.Add(++count);
+        }
+
+        count = 0;
+
+        int safeCount = 0;
+        string s = "";
+        int outCout = 0;
+        //从第一个人开始计数，每INTERVAL次则淘汰这个节点并继续从0开始计数 直到全部淘汰
+        while (!people.IsEmpty())
+        //while (outCout < TOTAL)
+        {
+            if(safeCount++ > 10000)
+            {
+                Debug.LogError("Dead");
+                return;
+            }
+            count++;
+            people.Move();
+            if(count == INTERVAL)
+            {
+                count = 0;
+                outCout++;
+                int outId = people.RemoveAtIterator();
+                s += outId + " ,";
+            }
+        }
+
+        Debug.LogError(s);
     }
 
     //魔术师发牌
