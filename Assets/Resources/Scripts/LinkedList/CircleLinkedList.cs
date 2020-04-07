@@ -6,6 +6,8 @@ using UnityEngine;
 
 /// <summary>
 /// 循环链表
+/// 初始状态 头指针和尾指针的next都指向头节点
+/// 有元素时,头结点的next指向第一个元素,尾指针指向最后一个元素,且最后一个元素的next指向第一个元素
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public class CircleLinkedList<T> : IListOperation<T>
@@ -24,198 +26,122 @@ public class CircleLinkedList<T> : IListOperation<T>
         }
     }
 
+    public int Count => GetCount();
+
+    Node _head;
+    Node _rear;//指向最后一个元素
+
     public CircleLinkedList()
     {
         _head = new Node();
-        _head.next = null;
+        _head.next = _head;
         _rear = _head;
     }
 
-    public T this[int index]
+    public void Add(T element)
     {
-        get => GetNodeAt(index).value;
-        set => GetNodeAt(index).value = value;
-    }
+        Node n = new Node(element);
 
-    private Node _head;
-    private Node _rear;
-
-    public int Count => GetLength();
-
-    public void Add(T value)
-    {
-        Node newNode = new Node(value);
-        _rear.next = newNode;
-        _rear = newNode;
-    }
-
-    public void Insert(int i, T value)
-    {
-        //找到指定位置的前后节点
-        Node prevNode = GetNodeAt(i - 1);
-        Node nextNode = prevNode.next;
-
-        //创建新节点 插入操作
-        Node newNode = new Node(value);
-        newNode.next = nextNode;
-        prevNode.next = newNode;
-
-        if (prevNode == _rear)
+        //空链表的情况
+        if(_rear.next == _head)
         {
-            Debug.Log("Change rear at InsertAt");
-            _rear = newNode;
+            _head.next = n;
+            n.next = n;
+            _rear = n;
         }
-
-        Debug.Log("Insert " + value.ToString() + " at " + i + " success!");
-        //return true;
-    }
-
-    public bool RemoveAt(int index)
-    {
-        int i = 0;
-        Node p = _head.next;
-        Node prev = _head;
-
-        while (p != _head && i <= index)
+        //非空链表
+        else
         {
-            //找到目标位置 进行移除操作
-            if (i == index)
-            {
-                prev.next = p.next;
-                Debug.LogError("remove success!");
-                return true;
-            }
-            prev = p;
-            p = p.next;
-            i++;
+            //插入到末尾
+            _rear.next = n;
+            //新元素指向第一个元素
+            n.next = _head.next;
+            //尾节点指向新元素
+            _rear = n;
         }
-
-        Debug.LogError("remove failed!");
-        return false;
-    }
-
-    public bool Delete(T value, bool all = false)
-    {
-        Node p = _head.next;
-        Node prev = _head;
-
-        while (p != null)
-        {
-            //找到目标位置 进行移除操作
-            if (p.value.Equals(value))
-            {
-                prev.next = p.next;
-                Debug.Log("remove success!" + value.ToString());
-                return true;
-            }
-            prev = p;
-            p = p.next;
-        }
-
-        Debug.Log("remove failed!");
-        return false;
     }
 
     public void Clear()
     {
-        //Node p = _head;
-        ////是否要断掉所有关联？
-        //while (p.next != null)
-        //{
-        //    Node temp = p;
-        //    p.next = null;
-
-        //}
-        _head.next = null;
+        _head.next = _head;
         _rear = _head;
     }
 
-    public int IndexOf(T element)
+    public bool Contains(T element)
     {
-        Node p = _head;
-        int index = 0;
-        while (p.next != _head)
+        throw new NotImplementedException();
+    }
+
+    public bool Delete(T element, bool all = false)
+    {
+        //没有元素
+        if(_head.next == _head)
         {
-            p = p.next;
+            return false;
+        }
+
+        //只有一个元素
+        if(_head.next == _rear)
+        {
+            _head.next = _head;
+            _rear = _head;
+            return true;
+        }
+
+        Node p = _head.next;
+        //如果删除的是第一个元素 需要吧最后一个元素指向第二个元素
+        if(p.value.Equals(element))
+        {
+            _head.next = p.next;
+            _rear.next = _rear;
+            return true;
+        }
+
+        Node prev = p;
+        p = p.next;
+        while (p != _head.next)
+        {
+            //找到改元素
             if (p.value.Equals(element))
             {
-                return index;
-            }
+                prev.next = p.next;
+                //如果删除的是尾节点
+                if(p.next == _head.next)
+                {
+                    //修改尾指针
+                    _rear = prev;
+                }
 
-            index++;
-        }
-
-        return -1;
-    }
-
-    public void LogList()
-    {
-        StringBuilder sb = new StringBuilder();
-        Node p = _head.next;
-        while (p != _head)
-        {
-            sb.Append(p.value.ToString());
-            sb.Append(",");
-            p = p.next;
-        }
-
-        Debug.Log(sb.ToString().TrimEnd(',') + "  len:" + Count);
-    }
-
-    private Node GetNodeAt(int index)
-    {
-        //-1表示头结点
-        if (index == -1)
-        {
-            return _head;
-        }
-
-        Node p = _head.next;
-        int i = 0;
-        while (p != _head && i < index)
-        {
-            p = p.next;
-            i++;
-        }
-
-        if (i == index && p != null)
-        {
-            Debug.Log("Get value:" + p.value.ToString());
-            return p;
-        }
-        else
-        {
-            return null;
-            throw new Exception("index is lager than list length!");
-        }
-    }
-
-    private int GetLength()
-    {
-        int len = 0;
-        Node p = _head;
-        while (p.next != _head)
-        {
-            len++;
-            p = p.next;
-        }
-
-        return len;
-    }
-
-    public bool Contains(T e)
-    {
-        Node p = _head;
-        while (p.next != _head)
-        {
-            if (p.next.value.Equals(e))
-            {
                 return true;
             }
-
+            //改变前一个记录
+            prev = p;
+            //指针往后移动
             p = p.next;
         }
 
         return false;
+    }
+
+    public int IndexOf(T element)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Insert(int i, T element)
+    {
+        throw new NotImplementedException();
+    }
+
+    int GetCount()
+    {
+        int count = 0;
+        Node p = _head.next;
+        while(p != _rear)
+        {
+            count++;
+        }
+
+        return count;
     }
 }
