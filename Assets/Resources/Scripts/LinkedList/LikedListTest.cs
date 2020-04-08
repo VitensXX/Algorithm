@@ -5,7 +5,7 @@ using UnityEngine;
 public class LikedListTest : MonoBehaviour
 {
     SingleLinkedList<string> _singleList;
-    CircleLinkedList<string> _cList;
+    CircularLinkedList<string> _cList;
 
     private void Start()
     {
@@ -15,7 +15,7 @@ public class LikedListTest : MonoBehaviour
         //    _singleList.Insert(0, i.ToString());
         //}
 
-        _cList = new CircleLinkedList<string>();
+        _cList = new CircularLinkedList<string>();
         for (int i = 0; i < 5; i++)
         {
             _cList.Add(i.ToString());

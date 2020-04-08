@@ -15,7 +15,10 @@ public class Josephus : MonoBehaviour
         Show();
         Josephus2();
 
-        //MagicPoker();
+        MagicPoker();
+        MagicPoker2();
+
+        LatinSquare(3);
     }
 
     //数组实现
@@ -59,7 +62,7 @@ public class Josephus : MonoBehaviour
     void Josephus2()
     {
         //从1到100编号 形成循环链表
-        CircleLinkedList<int> people = new CircleLinkedList<int>();
+        CircularLinkedList<int> people = new CircularLinkedList<int>();
         int count = 0;
         while(count < TOTAL)
         {
@@ -70,7 +73,6 @@ public class Josephus : MonoBehaviour
 
         int safeCount = 0;
         string s = "";
-        int outCout = 0;
         //从第一个人开始计数，每INTERVAL次则淘汰这个节点并继续从0开始计数 直到全部淘汰
         while (!people.IsEmpty())
         //while (outCout < TOTAL)
@@ -81,13 +83,15 @@ public class Josephus : MonoBehaviour
                 return;
             }
             count++;
-            people.Move();
+            //计数到下一个
+            int nextId = people.Move();
             if(count == INTERVAL)
             {
                 count = 0;
-                outCout++;
-                int outId = people.RemoveAtIterator();
-                s += outId + " ,";
+                //淘汰当前这个
+                people.RemoveAtIterator();
+                //int outId = people.RemoveAtIterator();
+                s += nextId + " ,";
             }
         }
 
@@ -144,5 +148,91 @@ public class Josephus : MonoBehaviour
         }
         Debug.LogError(s);
 
+    }
+
+    void MagicPoker2()
+    {
+        int[] poker = new int[13];
+
+        //牌堆,记录的是牌的索引值
+        CircularLinkedList<int> pokers = new CircularLinkedList<int>();
+        for (int i = 0; i < poker.Length; i++)
+        {
+            pokers.Add(i);
+        }
+
+        int pokerNumber = 1;//从1开始
+        int count = 0;
+        //如果牌堆没有发完
+        while (!pokers.IsEmpty())
+        {
+            count++;
+            int index = pokers.Move();
+            if(count == pokerNumber)
+            {
+                count = 0;
+                //发牌操作(移除)
+                pokers.RemoveAtIterator();
+                //int index = pokers.RemoveAtIterator();
+                poker[index] = pokerNumber;
+                //牌的点数加一
+                pokerNumber++;
+            }
+        }
+
+        string s = "";
+        for (int i = 0; i < poker.Length; i++)
+        {
+            s += poker[i] + ",";
+        }
+        Debug.LogError(s);
+    }
+
+    //拉丁方阵问题
+    void LatinSquare(int count)
+    {
+        CircularLinkedList<int> numbers = new CircularLinkedList<int>();
+        for (int i = 0; i < count; i++)
+        {
+            numbers.Add(i + 1);
+        }
+
+        string log = "";
+        for (int i = 0; i < count; i++)
+        {
+            int row = 0;
+            while(row < count)
+            {
+                log += numbers.Move() + " ,";
+                row++;
+            }
+            //新的一行从下一个位置开始
+            numbers.Move();
+            log += "\n";
+        }
+
+        Debug.LogError(log);
+    }
+
+    string Vigenere(string input)
+    {
+        int[] secret = new int[] { 1, 2, 3, 4 };
+        CircularLinkedList<char> letters = new CircularLinkedList<char>();
+        char a = 'a';
+        //赋值26个字母
+        for (int i = 0; i < 26; i++)
+        {
+            letters.Add(a++);
+        }
+
+        string result = "";
+        //开始解密
+        for (int i = 0; i < input.Length; i++)
+        {
+            char cur = input[i];
+            result += letters.ReMove(secret[i]);
+        }
+
+        return result;
     }
 }

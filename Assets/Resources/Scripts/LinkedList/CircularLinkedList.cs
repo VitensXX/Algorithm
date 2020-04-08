@@ -10,7 +10,7 @@ using UnityEngine;
 /// 有元素时,头结点的next指向第一个元素,尾指针指向最后一个元素,且最后一个元素的next指向头节点
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class CircleLinkedList<T> : IListOperation<T>
+public class CircularLinkedList<T> : IListOperation<T>
 {
     private class Node
     {
@@ -32,7 +32,7 @@ public class CircleLinkedList<T> : IListOperation<T>
     Node _rear;//指向最后一个元素
     Node _iterator;
 
-    public CircleLinkedList()
+    public CircularLinkedList()
     {
         _head = new Node();
         _head.next = _head;
@@ -154,7 +154,7 @@ public class CircleLinkedList<T> : IListOperation<T>
     }
 
     Node _prevIterator;
-    public void Move()
+    public T Move()
     {
         _prevIterator = _iterator;
         if(_iterator.next != _head)
@@ -165,6 +165,8 @@ public class CircleLinkedList<T> : IListOperation<T>
         {
             _iterator = _head.next;
         }
+
+        return _iterator.value;
     }
 
     public T RemoveAtIterator()
@@ -184,6 +186,19 @@ public class CircleLinkedList<T> : IListOperation<T>
             _prevIterator.next = _iterator.next;
         }
         return data;
+    }
+
+    public T ReMove(int step)
+    {
+        _iterator = _head;
+        int count = 0;
+        T result = default(T);
+        while(count < step)
+        {
+            result = Move();
+        }
+
+        return result;
     }
 
     public bool IsEmpty()
