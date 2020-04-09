@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class StringsTest
 {
-    bool BF(string input, string subStr)
+    //Brute Force
+    int BF(string S, string T)
     {
         int i = 0, j = 0;
-        while(i<input.Length && j < subStr.Length)
+        while(i<S.Length && j < T.Length)
         {
-            if (input[i] == subStr[j])
+            if (S[i] == T[j])
             {
                 i++;
                 j++;
@@ -21,8 +22,20 @@ public class StringsTest
                 j = 0;
             }
         }
-
-        return j == subStr.Length;
+        if(j == T.Length)
+        {
+            return i - j;
+        }
+        else
+        {
+            return -1;
+        }
     }
     //https://blog.csdn.net/rainchxy/article/details/78130155?depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-OPENSEARCH-16&utm_source=distribute.pc_relevant_right.none-task-blog-OPENSEARCH-16
+
+    int KMP(string S, string T)
+    {
+        return -1;
+    }
+
 }

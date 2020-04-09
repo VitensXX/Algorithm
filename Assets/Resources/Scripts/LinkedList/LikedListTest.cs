@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LikedListTest : MonoBehaviour
 {
-    SingleLinkedList<string> _singleList;
+    SingleLinkedList<string> _singleList = null;
     CircularLinkedList<string> _cList;
 
     private void Start()
