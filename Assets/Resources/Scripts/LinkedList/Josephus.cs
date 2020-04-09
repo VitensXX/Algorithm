@@ -19,6 +19,8 @@ public class Josephus : MonoBehaviour
         MagicPoker2();
 
         LatinSquare(3);
+
+        Vigenere("aabf");
     }
 
     //数组实现
@@ -216,7 +218,7 @@ public class Josephus : MonoBehaviour
 
     string Vigenere(string input)
     {
-        int[] secret = new int[] { 1, 2, 3, 4 };
+        int[] secret = new int[] { 1, 27, 2, 2 };
         CircularLinkedList<char> letters = new CircularLinkedList<char>();
         char a = 'a';
         //赋值26个字母
@@ -229,10 +231,15 @@ public class Josephus : MonoBehaviour
         //开始解密
         for (int i = 0; i < input.Length; i++)
         {
-            char cur = input[i];
-            result += letters.ReMove(secret[i]);
-        }
+            char decode = letters.MoveAt(letters.IndexOf(input[i]));
+            for (int j = 0; j < secret[i]; j++)
+            {
+                decode = letters.Move();
+            }
 
+            result += decode;
+        }
+        Debug.LogError(result);
         return result;
     }
 }

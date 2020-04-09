@@ -118,7 +118,20 @@ public class CircularLinkedList<T> : IListOperation<T>
 
     public int IndexOf(T element)
     {
-        throw new NotImplementedException();
+        Node p = _head;
+        int index = 0;
+        while(p.next != _head)
+        {
+            p = p.next;
+            if (p.value.Equals(element))
+            {
+                return index;
+            }
+
+            index++;
+        }
+
+        return -1;
     }
 
     public void Insert(int i, T element)
@@ -196,9 +209,15 @@ public class CircularLinkedList<T> : IListOperation<T>
         while(count < step)
         {
             result = Move();
+            count++;
         }
 
         return result;
+    }
+
+    public T MoveAt(int index)
+    {
+        return ReMove(index + 1);
     }
 
     public bool IsEmpty()
