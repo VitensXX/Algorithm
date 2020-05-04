@@ -7,8 +7,8 @@ namespace Vitens.BinaryTree
     public class BinaryTreeNode<T>
     {
         private T _data;
-        private BinaryTreeNode<T> _leftChildNode;
-        private BinaryTreeNode<T> _rightChildNode;
+        private BinaryTreeNode<T> _leftChild;
+        private BinaryTreeNode<T> _rightChild;
 
         public T Data
         {
@@ -16,16 +16,16 @@ namespace Vitens.BinaryTree
             set { _data = value; }
         }
 
-        public BinaryTreeNode<T> LeftChildNode
+        public BinaryTreeNode<T> LeftChild
         {
-            get { return _leftChildNode; }
-            set { _leftChildNode = value; }
+            get { return _leftChild; }
+            set { _leftChild = value; }
         }
 
-        public BinaryTreeNode<T> RightChildNode
+        public BinaryTreeNode<T> RightChild
         {
-            get { return _rightChildNode; }
-            set { _rightChildNode = value; }
+            get { return _rightChild; }
+            set { _rightChild = value; }
         }
 
         public BinaryTreeNode()
@@ -47,8 +47,14 @@ namespace Vitens.BinaryTree
         void CreateTreeNode(T val, BinaryTreeNode<T> left, BinaryTreeNode<T> right)
         {
             _data = val;
-            _leftChildNode = null;
-            _rightChildNode = null;
+            _leftChild = left;
+            _rightChild = right;
+        }
+
+        public T Visit()
+        {
+            Debug.Log(_data.ToString());
+            return _data;
         }
     }
 }

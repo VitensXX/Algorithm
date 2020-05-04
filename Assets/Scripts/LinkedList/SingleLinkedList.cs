@@ -82,7 +82,14 @@ public class SingleLinkedList<T> : IListOperation<T>
             if(i == index)
             {
                 prev.next = p.next;
-                Debug.LogError("remove success!");
+                //Debug.Log("remove success!");
+
+                //如果是尾巴 则需要修改rear
+                if(_rear == p)
+                {
+                    _rear = prev;
+                }
+
                 return true;
             }
             prev = p;
@@ -180,7 +187,7 @@ public class SingleLinkedList<T> : IListOperation<T>
 
         if (i == index && p != null)
         {
-            Debug.Log("Get value:" + p.value.ToString());
+            //Debug.Log("Get value:" + p.value.ToString());
             return p;
         }
         else
