@@ -56,5 +56,10 @@ namespace Vitens.BinaryTree
             Debug.Log(_data.ToString());
             return _data;
         }
+
+        public void Assign(T val)
+        {
+            _data = val;
+        }
     }
 }
