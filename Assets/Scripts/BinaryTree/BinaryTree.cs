@@ -139,7 +139,7 @@ namespace Vitens.BinaryTree
             node.Visit();
         }
 
-        //层序遍历 递归实现
+        //层序遍历
         public void LevelOrderTraverse(BinaryTreeNode<T> node)
         {
             Queue<BinaryTreeNode<T>> nodeQueue = new Queue<BinaryTreeNode<T>>();
@@ -164,43 +164,102 @@ namespace Vitens.BinaryTree
         //非递归实现的中序遍历
         public void InOrderTraverseWithStack()
         {
-            //BinaryTreeNode<T> p = root;
             Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
-            stack.Push(root);
+            BinaryTreeNode<T> p = new BinaryTreeNode<T>();
+            p = root;
             int err = 0;
-            while(stack.Count > 0)
+            while(stack.Count > 0 || p != null)
             {
                 if (err++ > 20)
                 {
                     Debug.LogError("Error");
                     break;
                 }
-                //栈顶元素
-                BinaryTreeNode<T> top = stack.Peek();
-                //有左孩子，继续入栈
-                while(top.LeftChild != null)
+                //指针P不为空，入栈，继续查找左孩子
+                while(p != null)
                 {
-                    Debug.LogError("push lc");
-                    stack.Push(top.LeftChild);
+                    stack.Push(p);
+                    p = p.LeftChild;
                 }
 
                 //出栈操作
                 //没有左孩子，出栈
                 if(stack.Count > 0)
                 {
-                    stack.Pop();
-                    top.Visit();
-                    //校验是否有右孩子
-                    if(top.RightChild != null)
-                    {
-                        Debug.LogError("push rc");
-
-                        stack.Push(top.RightChild);
-                    }
+                    p = stack.Pop();
+                    p.Visit();
+                    p = p.RightChild;
                 }
             }
         }
-    }
 
+        //非递归实现的先序遍历
+        public void PreOrderTraverseWithStack()
+        {
+            Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
+            BinaryTreeNode<T> p = new BinaryTreeNode<T>();
+            p = root;
+            int err = 0;
+            while (stack.Count > 0 || p != null)
+            {
+                if (err++ > 20)
+                {
+                    Debug.LogError("Error");
+
+                    break;
+                }
+
+                //当前不为空 先访问在入栈 继续遍历左边
+                if (p != null)
+                {
+                    p.Visit();
+                    stack.Push(p);
+                    p = p.LeftChild;
+                }
+                //没有左孩子，出栈
+                else if (stack.Count > 0)
+                {
+                    p = stack.Pop();
+                    p = p.RightChild;
+                }
+            }
+        }
+
+        //非递归的后续遍历
+        public void PostOrderTraverseWithStack()
+        {
+            Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
+            Stack<BinaryTreeNode<T>> stack2 = new Stack<BinaryTreeNode<T>>();
+
+            BinaryTreeNode<T> p = new BinaryTreeNode<T>();
+            p = root;
+            int err = 0;
+            while (stack.Count > 0 || p != null)
+            {
+                if (err++ > 20)
+                {
+                    Debug.LogError("Error");
+                    break;
+                }
+
+                if (p != null)
+                {
+                    stack.Push(p);
+                    stack2.Push(p);
+                    p = p.RightChild;
+                }
+                else if (stack.Count > 0)
+                {
+                    p = stack.Pop();
+                    p = p.LeftChild;
+                }
+            }
+
+            while(stack2.Count > 0)
+            {
+                stack2.Pop().Visit();
+            }
+        }
+    }
 
 }

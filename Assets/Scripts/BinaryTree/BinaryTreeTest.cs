@@ -34,9 +34,11 @@ public class BinaryTreeTest : MonoBehaviour
             bt.PreOrderTraverse(bt.root);
         }
 
-        if (Input.GetKey(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            bt.InOrderTraverseWithStack();
+            //bt.InOrderTraverseWithStack();
+            //bt.PreOrderTraverseWithStack();
+            bt.PostOrderTraverseWithStack();
         }
 
         if (In)
