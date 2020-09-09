@@ -156,4 +156,69 @@ public class TestForPractice : MonoBehaviour
 
         return head.next;
     }
+
+    #region 滑动窗口
+    string MinWindow(string s, string t)
+    {
+        Dictionary<char, int> window = new Dictionary<char, int>();
+        Dictionary<char, int> need = new Dictionary<char, int>();
+        for (int i = 0; i < t.Length; i++)
+        {
+            if (need.ContainsKey(t[i]))
+            {
+                need[t[i]]++;
+            }
+            else
+            {
+                need[t[i]] = 1;
+            }
+        }
+
+        int left = 0;
+        int right = 0;
+        int valid = 0;
+        int start = 0;
+        int len = int.MaxValue;
+        while(right < s.Length)
+        {
+            char c = s[right];
+            right++;
+            
+            if (need.ContainsKey(c))
+            {
+                window[c] = window.ContainsKey(c) ? window[c] + 1 : 1;
+                if(window[c] == need[c])
+                {
+                    valid++;
+                }
+            }
+
+            //所有字符满足条件,窗口开始缩小,找更优解
+            while(valid == t.Length)
+            {
+                //记录最小
+                if(right - left < len)
+                {
+                    len = right - left;
+                    start = left;
+                }
+
+                char r = s[left];
+                left++;
+                if (need.ContainsKey(r))
+                {
+                    if (window[r] == need[r])
+                    {
+                        valid--;
+                    }
+                    window[r]--;
+                }
+            }
+
+            return len == int.MaxValue ? "" : s.Substring(start, len);
+        }
+
+        return "";
+    }
+    #endregion
 }
